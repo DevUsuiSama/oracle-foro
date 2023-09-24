@@ -1,8 +1,10 @@
 package com.foro.api.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.foro.api.dto.topicos.ActualizarTopicoDTO;
 import com.foro.api.dto.topicos.TopicoDTO;
@@ -28,33 +31,37 @@ public class TopicoController {
     private TopicosRepository topicosRepository;
     
     @PostMapping
-    public void registra(@RequestBody @Valid TopicoDTO topicoDTO) {
-        topicosRepository.save(new TopicosModel(topicoDTO));
+    public ResponseEntity<TopicoDTO> registra(@RequestBody @Valid TopicoDTO topicoDTO, UriComponentsBuilder uriComponentsBuilder) {
+        TopicosModel topicosModel = topicosRepository.save(new TopicosModel(topicoDTO));
+        URI uri = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topicosModel.getId()).toUri();
+        return ResponseEntity.created(uri).body(topicoDTO);
     }
 
     @GetMapping
-    public List<TopicoDTO> mostrar() {
-        return topicosRepository.findAll().stream().map(TopicoDTO::new).toList();
+    public ResponseEntity<List<TopicoDTO>> mostrar() {
+        return ResponseEntity.ok(topicosRepository.findAll().stream().map(TopicoDTO::new).toList());
     }
 
     @GetMapping("/{id}")
     @Transactional
-    public TopicoDTO mostrarPorID(@PathVariable int id) {
-        return new TopicoDTO(topicosRepository.getReferenceById(id));
+    public ResponseEntity<TopicoDTO> mostrarPorID(@PathVariable int id) {
+        return ResponseEntity.ok(new TopicoDTO(topicosRepository.getReferenceById(id)));
     }
 
     @PutMapping
     @Transactional
-    public void actualizar(@RequestBody @Valid ActualizarTopicoDTO actualizarTopicoDTO) {
+    public ResponseEntity<?> actualizar(@RequestBody @Valid ActualizarTopicoDTO actualizarTopicoDTO) {
         TopicosModel topicosModel = topicosRepository.getReferenceById(actualizarTopicoDTO.id());
         topicosModel.actualizar(actualizarTopicoDTO);
+        return ResponseEntity.ok(new TopicoDTO(topicosModel));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void eliminar(@PathVariable int id) {
+    public ResponseEntity<?> eliminar(@PathVariable int id) {
         TopicosModel topicosModel = topicosRepository.getReferenceById(id);
         topicosRepository.delete(topicosModel);
+        return ResponseEntity.noContent().build();
     }
 
 }
