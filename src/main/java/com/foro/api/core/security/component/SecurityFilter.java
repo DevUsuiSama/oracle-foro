@@ -1,4 +1,4 @@
-package com.foro.api.infra.component;
+package com.foro.api.core.security.component;
 
 import java.io.IOException;
 
@@ -8,8 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.foro.api.infra.services.TokenService;
-import com.foro.api.repositories.UsuarioRepository;
+import com.foro.api.core.security.services.TokenService;
+import com.foro.api.repository.UsuarioRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,7 +33,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             var nombreUsuario = tokenService.getSubject(token);
             if (nombreUsuario != null) {
                 var usuario = usuarioRepository.findByNombreUsuario(nombreUsuario);
-                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                var authentication = new UsernamePasswordAuthenticationToken(usuario, null,
+                        usuario.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

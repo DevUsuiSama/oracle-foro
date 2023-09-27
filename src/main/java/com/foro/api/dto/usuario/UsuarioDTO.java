@@ -1,11 +1,12 @@
 package com.foro.api.dto.usuario;
 
-import com.foro.api.models.UsuarioModel;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.foro.api.model.UsuarioModel;
 
 import jakarta.validation.constraints.NotBlank;
 
 public record UsuarioDTO(
-        @NotBlank String nombre_usuario,
+        @NotBlank @JsonAlias("nombre_usuario") String nombreUsuario,
         @NotBlank String clave) {
 
     public UsuarioDTO(UsuarioModel usuarioModel) {

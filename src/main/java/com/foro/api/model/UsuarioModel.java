@@ -1,4 +1,4 @@
-package com.foro.api.models;
+package com.foro.api.model;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,12 +35,12 @@ public class UsuarioModel implements UserDetails {
     private String clave;
 
     public UsuarioModel(UsuarioDTO usuarioDTO) {
-        nombreUsuario = usuarioDTO.nombre_usuario();
+        nombreUsuario = usuarioDTO.nombreUsuario();
         this.clave = usuarioDTO.clave();
     }
 
     public void actualizar(ActualizarUsuarioDTO actualizarUsuarioDTO) {
-        nombreUsuario = actualizarUsuarioDTO.nombre_usuario() == null ? nombreUsuario : actualizarUsuarioDTO.nombre_usuario();
+        nombreUsuario = actualizarUsuarioDTO.nombreUsuario() == null ? nombreUsuario : actualizarUsuarioDTO.nombreUsuario();
         this.clave = actualizarUsuarioDTO.clave() == null ? this.clave : actualizarUsuarioDTO.clave();
     }
 

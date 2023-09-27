@@ -1,6 +1,6 @@
-package com.foro.api.models;
+package com.foro.api.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import com.foro.api.dto.topicos.ActualizarTopicoDTO;
 import com.foro.api.dto.topicos.TopicoDTO;
@@ -31,7 +31,7 @@ public class TopicosModel {
     private int id;
     private String titulo;
     private String mensaje;
-    private Date fechaCreacion;
+    private LocalDate fechaCreacion;
     @Enumerated
     private EstatusEnum estatus;
     private String autor;
@@ -41,7 +41,7 @@ public class TopicosModel {
     public TopicosModel(TopicoDTO topicoDTO) {
         this.titulo = topicoDTO.titulo();
         this.mensaje = topicoDTO.mensaje();
-        fechaCreacion = topicoDTO.fecha_creacion();
+        fechaCreacion = topicoDTO.fechaCreacion();
         this.estatus = topicoDTO.estatus();
         this.autor = topicoDTO.autor();
         this.curso = topicoDTO.curso();
@@ -50,7 +50,7 @@ public class TopicosModel {
     public void actualizar(ActualizarTopicoDTO actualizarTopicoDTO) {
         this.titulo = actualizarTopicoDTO.titulo() == null ? this.titulo : actualizarTopicoDTO.titulo();
         this.mensaje = actualizarTopicoDTO.mensaje() == null ? this.mensaje : actualizarTopicoDTO.mensaje();
-        fechaCreacion = actualizarTopicoDTO.fecha_creacion() == null ? this.fechaCreacion : actualizarTopicoDTO.fecha_creacion();
+        fechaCreacion = actualizarTopicoDTO.fechaCreacion() == null ? this.fechaCreacion : actualizarTopicoDTO.fechaCreacion();
         this.estatus = actualizarTopicoDTO.estatus() == null ? this.estatus : actualizarTopicoDTO.estatus();
         this.autor = actualizarTopicoDTO.autor() == null ? this.autor : actualizarTopicoDTO.autor();
         this.curso = actualizarTopicoDTO.curso() == null ? this.curso : actualizarTopicoDTO.curso();

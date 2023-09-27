@@ -1,4 +1,4 @@
-package com.foro.api.dto.jwt;
+package com.foro.api.core.security.dto;
 
 public record TokenDTO(
         String token) {

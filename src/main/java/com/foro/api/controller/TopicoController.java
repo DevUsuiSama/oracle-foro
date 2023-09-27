@@ -1,6 +1,5 @@
-package com.foro.api.controllers;
+package com.foro.api.controller;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,50 +16,47 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.foro.api.dto.topicos.ActualizarTopicoDTO;
 import com.foro.api.dto.topicos.TopicoDTO;
-import com.foro.api.models.TopicosModel;
-import com.foro.api.repositories.TopicosRepository;
+import com.foro.api.service.TopicosService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired
-    private TopicosRepository topicosRepository;
+    private TopicosService topicosService;
     
     @PostMapping
     public ResponseEntity<TopicoDTO> registra(@RequestBody @Valid TopicoDTO topicoDTO, UriComponentsBuilder uriComponentsBuilder) {
-        TopicosModel topicosModel = topicosRepository.save(new TopicosModel(topicoDTO));
-        URI uri = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topicosModel.getId()).toUri();
-        return ResponseEntity.created(uri).body(topicoDTO);
+        topicosService.registrar(topicoDTO);
+        return ResponseEntity.created(topicosService.construirURI(uriComponentsBuilder)).body(topicoDTO);
     }
 
     @GetMapping
     public ResponseEntity<List<TopicoDTO>> mostrar() {
-        return ResponseEntity.ok(topicosRepository.findAll().stream().map(TopicoDTO::new).toList());
+        return ResponseEntity.ok(topicosService.mostrarTodo());
     }
 
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity<TopicoDTO> mostrarPorID(@PathVariable int id) {
-        return ResponseEntity.ok(new TopicoDTO(topicosRepository.getReferenceById(id)));
+        return ResponseEntity.ok(topicosService.mostrarPorID(id));
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity<?> actualizar(@RequestBody @Valid ActualizarTopicoDTO actualizarTopicoDTO) {
-        TopicosModel topicosModel = topicosRepository.getReferenceById(actualizarTopicoDTO.id());
-        topicosModel.actualizar(actualizarTopicoDTO);
-        return ResponseEntity.ok(new TopicoDTO(topicosModel));
+        return ResponseEntity.ok(topicosService.actualizar(actualizarTopicoDTO));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> eliminar(@PathVariable int id) {
-        TopicosModel topicosModel = topicosRepository.getReferenceById(id);
-        topicosRepository.delete(topicosModel);
+        topicosService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 
