@@ -8,7 +8,7 @@ Proyecto realizado para completar el desafió de Alura.
 | Perfiles | Descripción |
 |---|---|
 | prod | producción |
-| dev | desarrollador |
+| dev | desarrolllo |
 
 ##### Lanzamiento a producción
 ```sh
