@@ -1,6 +1,7 @@
 package com.foro.api.service;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,17 @@ public class TopicosService {
     private TopicosRepository topicosRepository;
     private TopicosModel topicosModel;
 
-    public void registrar(TopicoDTO topicoDTO) {
+    public TopicoDTO registrar(TopicoDTO topicoDTO) {
         topicosModel = topicosRepository.save(new TopicosModel(topicoDTO));
+        return new TopicoDTO(topicosModel);
     }
 
     public List<TopicoDTO> mostrarTodo() {
         return topicosRepository.findAll().stream().map(TopicoDTO::new).toList();
+    }
+
+    public List<TopicoDTO> mostrarPorFecha(LocalDate fecha) {
+        return topicosRepository.seleccionarTodosLosTopicosConFecha(fecha).stream().map(TopicoDTO::new).toList();
     }
 
     public TopicoDTO mostrarPorID(int id) {

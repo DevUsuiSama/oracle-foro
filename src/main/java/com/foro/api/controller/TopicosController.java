@@ -1,8 +1,10 @@
 package com.foro.api.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,15 +27,15 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/topicos")
 @SecurityRequirement(name = "bearer-key")
-public class TopicoController {
+public class TopicosController {
 
     @Autowired
     private TopicosService topicosService;
-    
+
     @PostMapping
-    public ResponseEntity<TopicoDTO> registra(@RequestBody @Valid TopicoDTO topicoDTO, UriComponentsBuilder uriComponentsBuilder) {
-        topicosService.registrar(topicoDTO);
-        return ResponseEntity.created(topicosService.construirURI(uriComponentsBuilder)).body(topicoDTO);
+    public ResponseEntity<TopicoDTO> registra(@RequestBody @Valid TopicoDTO topicoDTO,
+            UriComponentsBuilder uriComponentsBuilder) {
+        return ResponseEntity.created(topicosService.construirURI(uriComponentsBuilder)).body(topicosService.registrar(topicoDTO));
     }
 
     @GetMapping
@@ -41,8 +43,12 @@ public class TopicoController {
         return ResponseEntity.ok(topicosService.mostrarTodo());
     }
 
+    @GetMapping("/consultar_por_fecha/{fecha}")
+    public ResponseEntity<List<TopicoDTO>> mostrarPorFecha(@PathVariable @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate fecha) {
+        return ResponseEntity.ok(topicosService.mostrarPorFecha(fecha));
+    }
+
     @GetMapping("/{id}")
-    @Transactional
     public ResponseEntity<TopicoDTO> mostrarPorID(@PathVariable int id) {
         return ResponseEntity.ok(topicosService.mostrarPorID(id));
     }
