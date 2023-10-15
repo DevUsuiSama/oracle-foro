@@ -34,7 +34,7 @@ public class TopicosRepositoryTest {
                 "c++ o rust",
                 "A dia de hoy uno de los debates mas controversial",
                 LocalDate.of(2022, 10, 25),
-                EstatusEnum.ACTIVO,
+                EstatusEnum.RESUELTO,
                 "peter",
                 CursoEnum.G3);
         return testEntityManager.persist(topicosModel);

@@ -56,7 +56,7 @@ public class TopicosControllerTest {
         var datos = new TopicoDTO("c++ o rust",
                 "A dia de hoy uno de los debates mas controversial",
                 LocalDate.of(2022, 10, 25),
-                EstatusEnum.ACTIVO,
+                EstatusEnum.RESUELTO,
                 "peter",
                 CursoEnum.G3);
         when(topicosService.registrar(any())).thenReturn(datos);
@@ -65,7 +65,7 @@ public class TopicosControllerTest {
                 .content(topicosJacksonTester.write(new TopicoDTO("c++ o rust",
                         "A dia de hoy uno de los debates mas controversial",
                         LocalDate.of(2022, 10, 25),
-                        EstatusEnum.ACTIVO,
+                        EstatusEnum.RESUELTO,
                         "peter",
                         CursoEnum.G3)).getJson()))
                 .andReturn().getResponse();
